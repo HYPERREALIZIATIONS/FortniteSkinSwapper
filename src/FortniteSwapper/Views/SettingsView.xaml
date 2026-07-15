@@ -1,0 +1,92 @@
+<UserControl x:Class="FortniteSwapper.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel MaxWidth="760">
+            <TextBlock Text="Settings" Style="{StaticResource PageTitle}" />
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="Fortnite install" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}" Margin="0,0,0,8" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding InstallPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SearchBoxStyle}" />
+                        <Button Grid.Column="1" Content="Browse" Command="{Binding BrowsePathCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="8,0,0,0" />
+                        <Button Grid.Column="2" Content="Auto-detect" Command="{Binding AutoDetectCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="8,0,0,0" />
+                    </Grid>
+                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedText}">
+                        The folder that contains <Run Text="FortniteGame" /> (usually <Run Text="C:\Program Files\Epic Games\Fortnite" />).
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="Fortnite version" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}" Margin="0,0,0,8" />
+                    <TextBox Width="200" HorizontalAlignment="Left" Text="{Binding SelectedVersion, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SearchBoxStyle}" />
+                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedText}">
+                        Used to pick the correct cosmetics mapping. Auto-detected from the install when possible.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="Cosmetics mapping" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}" Margin="0,0,0,8" />
+                    <TextBlock Style="{StaticResource MutedText}" Margin="0,0,0,8">
+                        <Run Text="Loaded entries: " /><Run Text="{Binding MappingCoverage}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Paste a mapping JSON (cosmeticId -> pak/sig) for your version:" />
+                    <TextBox Height="140" Text="{Binding MappingEditorJson, UpdateSourceTrigger=PropertyChanged}"
+                             AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                             Style="{StaticResource SearchBoxStyle}" />
+                    <Button Content="Import mapping" Command="{Binding ImportMappingCommand}" Style="{StaticResource PrimaryButtonStyle}"
+                            HorizontalAlignment="Left" Margin="0,8,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="Appearance & logs" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}" Margin="0,0,0,8" />
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Theme" />
+                    <ComboBox Width="160" HorizontalAlignment="Left" ItemsSource="{Binding Themes}"
+                              SelectedItem="{Binding Theme}" Background="{StaticResource PanelBrush}"
+                              Foreground="{StaticResource TextBrush}" BorderBrush="{StaticResource BorderBrush}" />
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Logs folder" Margin="0,10,0,0" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding LogsPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SearchBoxStyle}" />
+                        <Button Grid.Column="1" Content="Open logs" Command="{Binding OpenLogsCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="8,0,0,0" />
+                    </Grid>
+                    <CheckBox Margin="0,10,0,0" Content="I understand the risks (cosmetic-only local changes, ToS / anti-cheat)."
+                              IsChecked="{Binding DisclaimerAccepted}" Foreground="{StaticResource TextBrush}" />
+                    <Button Content="Save settings" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButtonStyle}"
+                            HorizontalAlignment="Left" Margin="0,10,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource DisclaimerStyle}">
+                <StackPanel>
+                    <TextBlock Text="Disclaimer" FontWeight="Bold" Foreground="{StaticResource DangerBrush}" Margin="0,0,0,6" />
+                    <TextBlock Style="{StaticResource MutedText}" TextWrapping="Wrap">
+                        Fortnite Swapper edits Fortnite's local .pak files so one cosmetic appears as another on YOUR screen only.
+                        Other players still see your real cosmetics. This is fan-made, not affiliated with or endorsed by Epic Games.
+                        Modifying game files can violate the Fortnite Terms of Service and may be detected by Easy Anti-Cheat / BattlEye.
+                        Swaps may stop working after a Fortnite update. Always keep the automatic backups and use a separate account if unsure.
+                        No login, no server interaction, no gameplay or anti-cheat changes are performed.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Margin="0,4,0,12" Foreground="{StaticResource SuccessBrush}" Text="{Binding MappingMessage}" TextWrapping="Wrap" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

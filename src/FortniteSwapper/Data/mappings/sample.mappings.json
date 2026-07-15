@@ -1,0 +1,8 @@
+{
+  "_note": "ILLUSTRATIVE SAMPLE ONLY. This is NOT authoritative Fortnite mapping data. The app ships this file so the mappings folder exists, but you MUST supply the real per-version mapping (cosmeticId -> pak/sig filenames) for your Fortnite version. The app blocks swaps when no mapping exists for the selected version. See Settings > Cosmetics mapping to import the real JSON.",
+  "version": "0.0-sample",
+  "cosmetics": {
+    "Character_CID_ExampleSource": { "pak": "pakchunk000-Windows.pak", "sig": "pakchunk000-Windows.sig" },
+    "Character_CID_ExampleTarget": { "pak": "pakchunk001-Windows.pak", "sig": "pakchunk001-Windows.sig" }
+  }
+}
