@@ -32,7 +32,7 @@ public class SettingsService : ISettingsService
             if (File.Exists(_file))
             {
                 var json = File.ReadAllText(_file);
-                var loaded = JsonSerializer.Deserialize<AppSettings>(json);
+                var loaded = JsonSerializer.Deserialize<AppSettings>(json, JsonDefaults.Options);
                 if (loaded is not null) Current = loaded;
             }
         }
@@ -52,7 +52,7 @@ public class SettingsService : ISettingsService
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(_file)!);
-            File.WriteAllText(_file, JsonSerializer.Serialize(Current, new JsonSerializerOptions { WriteIndented = true }));
+            File.WriteAllText(_file, JsonSerializer.Serialize(Current, JsonDefaults.Options));
         }
         catch
         {

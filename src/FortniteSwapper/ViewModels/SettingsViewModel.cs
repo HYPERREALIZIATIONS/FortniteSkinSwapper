@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using FortniteSwapper.Models;
 using FortniteSwapper.Services;
 using System.Diagnostics;
-using System.Windows.Forms;
 
 namespace FortniteSwapper.ViewModels;
 
@@ -13,6 +12,7 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IFortniteLocator _locator;
     private readonly IMappingService _mappings;
     private readonly ILogService _log;
+    private readonly IFolderPicker _picker;
 
     [ObservableProperty] private string _installPath = string.Empty;
     [ObservableProperty] private string _selectedVersion = string.Empty;
@@ -27,12 +27,13 @@ public partial class SettingsViewModel : ViewModelBase
 
     public override string Title => "Settings";
 
-    public SettingsViewModel(ISettingsService settings, IFortniteLocator locator, IMappingService mappings, ILogService log)
+    public SettingsViewModel(ISettingsService settings, IFortniteLocator locator, IMappingService mappings, ILogService log, IFolderPicker picker)
     {
         _settings = settings;
         _locator = locator;
         _mappings = mappings;
         _log = log;
+        _picker = picker;
 
         InstallPath = _settings.Current.InstallPath;
         SelectedVersion = _settings.Current.SelectedVersion;
@@ -46,30 +47,19 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private void BrowsePath()
     {
-        using var dialog = new FolderBrowserDialog
-        {
-            Description = "Select your Fortnite install folder (the one containing 'FortniteGame').",
-            UseDescriptionForTitle = true
-        };
+        var picked = _picker.PickFolder(InstallPath);
+        if (picked is null) return;
 
-        if (!string.IsNullOrWhiteSpace(InstallPath) && System.IO.Directory.Exists(InstallPath))
+        InstallPath = picked;
+        if (_locator.IsValidInstall(InstallPath))
         {
-            dialog.InitialDirectory = InstallPath;
+            var v = _locator.DetectVersion(InstallPath);
+            if (!string.IsNullOrWhiteSpace(v)) SelectedVersion = v;
+            MappingMessage = $"Fortnite install validated. Detected version: {SelectedVersion}.";
         }
-
-        if (dialog.ShowDialog() == DialogResult.OK)
+        else
         {
-            InstallPath = dialog.SelectedPath;
-            if (_locator.IsValidInstall(InstallPath))
-            {
-                var v = _locator.DetectVersion(InstallPath);
-                if (!string.IsNullOrWhiteSpace(v)) SelectedVersion = v;
-                MappingMessage = $"Fortnite install validated. Detected version: {SelectedVersion}.";
-            }
-            else
-            {
-                MappingMessage = "That folder does not look like a Fortnite install (missing FortniteGame\\Content\\Paks).";
-            }
+            MappingMessage = "That folder does not look like a Fortnite install (missing FortniteGame\\Content\\Paks).";
         }
     }
 

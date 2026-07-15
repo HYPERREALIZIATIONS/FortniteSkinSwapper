@@ -179,7 +179,7 @@ public class SwapService : ISwapService
         try
         {
             if (!File.Exists(_manifestPath)) return new List<SwapRecord>();
-            var list = JsonSerializer.Deserialize<List<SwapRecord>>(File.ReadAllText(_manifestPath));
+            var list = JsonSerializer.Deserialize<List<SwapRecord>>(File.ReadAllText(_manifestPath), JsonDefaults.Options);
             return list ?? new List<SwapRecord>();
         }
         catch

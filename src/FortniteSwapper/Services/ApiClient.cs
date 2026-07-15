@@ -25,7 +25,7 @@ public class ApiClient : IApiClient
 
     public async Task<List<Cosmetic>> GetCosmeticsAsync()
     {
-        var response = await _http.GetFromJsonAsync<ApiResponse<List<ApiCosmetic>>>(Url);
+        var response = await _http.GetFromJsonAsync<ApiResponse<List<ApiCosmetic>>>(Url, JsonDefaults.Options);
         if (response?.Data is null)
         {
             throw new System.InvalidOperationException("Fortnite-API returned an empty response.");

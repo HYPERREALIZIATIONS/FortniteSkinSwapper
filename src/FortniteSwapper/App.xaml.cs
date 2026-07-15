@@ -63,6 +63,7 @@ public partial class App : Application
         services.AddSingleton<ISwapService>(sp => sp.GetRequiredService<SwapService>());
 
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IFolderPicker, WindowsFolderPicker>();
 
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<HomeViewModel>();

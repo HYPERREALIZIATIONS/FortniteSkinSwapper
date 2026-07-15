@@ -46,7 +46,7 @@ public class MappingService : IMappingService
 
         try
         {
-            _current = JsonSerializer.Deserialize<MappingFile>(File.ReadAllText(file));
+            _current = JsonSerializer.Deserialize<MappingFile>(File.ReadAllText(file), JsonDefaults.Options);
             return _current is not null;
         }
         catch
@@ -63,7 +63,7 @@ public class MappingService : IMappingService
 
     public void Import(string jsonContent)
     {
-        var file = JsonSerializer.Deserialize<MappingFile>(jsonContent)
+        var file = JsonSerializer.Deserialize<MappingFile>(jsonContent, JsonDefaults.Options)
                    ?? throw new InvalidOperationException("Invalid mapping JSON.");
 
         if (string.IsNullOrWhiteSpace(file.Version))
@@ -86,7 +86,7 @@ public class MappingService : IMappingService
         if (_current is null) return;
         Directory.CreateDirectory(_root);
         var file = Path.Combine(_root, $"{Sanitize(_current.Version)}.mappings.json");
-        File.WriteAllText(file, JsonSerializer.Serialize(_current, new JsonSerializerOptions { WriteIndented = true }));
+        File.WriteAllText(file, JsonSerializer.Serialize(_current, JsonDefaults.Options));
     }
 
     private static string Sanitize(string version) =>

@@ -25,7 +25,7 @@ public class CacheService : ICacheService
         try
         {
             if (!File.Exists(_file)) return null;
-            var list = JsonSerializer.Deserialize<List<Cosmetic>>(File.ReadAllText(_file));
+            var list = JsonSerializer.Deserialize<List<Cosmetic>>(File.ReadAllText(_file), JsonDefaults.Options);
             return list is { Count: > 0 } ? list : null;
         }
         catch
